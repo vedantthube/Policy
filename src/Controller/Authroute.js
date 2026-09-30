@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
     // 2. Hash password securely
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
-
+    console.log("aaaa", passwordHash);
     // 3. Insert user and RETURNING id to get the new record
     const queryText = `
       INSERT INTO users (name, dob, mobile, mail, password_hash, gender)
