@@ -15,7 +15,6 @@ const allowedOrigins = [
   "http://localhost:5173", // Local Vite/React
   process.env.FRONTEND_URL, // Production frontend URL (set after deploying frontend)
 ];
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -28,6 +27,7 @@ app.use(
     credentials: true,
   }),
 );
+
 //save user in users db
 app.post("/register", registerUser);
 app.post("/login", Loginuser);
