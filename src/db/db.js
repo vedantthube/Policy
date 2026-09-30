@@ -10,9 +10,13 @@ console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
+  // ssl: {
+  //   rejectUnauthorized: false,
+  // },
 });
 
 pool.on("connect", () => {

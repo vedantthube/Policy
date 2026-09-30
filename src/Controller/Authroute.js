@@ -1,13 +1,13 @@
-const express = require("express");
+// const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const pool = require("../db/db");
-const app = express();
+// const app = express();
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_super_secret_jwt_key";
 
-const registerUser = app.post("/register", async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     console.log("API STARTED - Saving User");
     const { name, email, phone, dob, gender, password } = req.body;
@@ -60,10 +60,10 @@ const registerUser = app.post("/register", async (req, res) => {
 
     res.status(500).json({ message: "Database error" });
   }
-});
+};
 
 //login
-const Loginuser = app.post("/login", async (req, res) => {
+const Loginuser = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("LOFFFFFF", email, password);
@@ -114,7 +114,7 @@ const Loginuser = app.post("/login", async (req, res) => {
     console.error("Login error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
-});
+};
 module.exports = {
   registerUser,
   Loginuser,
