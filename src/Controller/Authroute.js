@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const pool = require("../db/db");
 // const app = express();
-app.use(express.json());
+// app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_super_secret_jwt_key";
 
