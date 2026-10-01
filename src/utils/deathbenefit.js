@@ -1,9 +1,4 @@
-export const calculateDeathBenefit = (
-  policyType,
-  sumAssured,
-  fundValue,
-  sai,
-) => {
+const calculateDeathBenefit = (policyType, sumAssured, fundValue, sai) => {
   // sai = Sum Assured at Issue
 
   const deathBenefitFormulas = {
@@ -25,3 +20,4 @@ export const calculateDeathBenefit = (
     deathBenefitFormulas[policyType] || deathBenefitFormulas["Type_4d"];
   return Math.max(0, formula());
 };
+module.exports = { calculateDeathBenefit };

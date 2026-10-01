@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { registerUser, Loginuser } = require("./Controller/Authroute");
+const { Illustrationcontroller } = require("./Controller/illustration");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(express.json());
 // Routes
 app.post("/register", registerUser);
 app.post("/login", Loginuser);
+app.post("/api/illustrations", Illustrationcontroller);
 
 // Use Render's dynamic PORT with a fallback to 5000 for local testing
 const PORT = process.env.PORT || 5000;

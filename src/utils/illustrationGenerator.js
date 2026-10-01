@@ -1,4 +1,10 @@
-export const generateIllustration = (policyData) => {
+const { calculateAge } = require("../utils/validation");
+const { calculateAnnualPremium } = require("./premiumcalculator");
+const { calculateFundValue } = require("./fundValueCalculator");
+const { calculateBonus, getBonusRate } = require("./bonuscalculator");
+const { calculateDeathBenefit } = require("./deathbenefit");
+
+const generateIllustration = (policyData) => {
   const {
     dob,
     gender,
@@ -36,8 +42,7 @@ export const generateIllustration = (policyData) => {
       year <= premiumPaymentTerm ? calculateBonus(sumAssured, year) : 0;
 
     // Total Benefit
-    const totalBenefit =
-      year === premiumPaymentTerm ? sumAssured + fundValue : 0;
+    const totalBenefit = year === policyTerm ? sumAssured + fundValue : 0;
 
     // Death Benefit
     const deathBenefit = calculateDeathBenefit(
@@ -84,7 +89,7 @@ export const generateIllustration = (policyData) => {
   };
 };
 
-export const calculateIRR = (cashflows) => {
+const calculateIRR = (cashflows) => {
   // Newton-Raphson method for IRR calculation
   let irr = 0.1; // Initial guess
 
@@ -108,3 +113,4 @@ export const calculateIRR = (cashflows) => {
 
   return irr;
 };
+module.exports = { generateIllustration };

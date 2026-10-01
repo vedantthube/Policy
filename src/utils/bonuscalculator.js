@@ -1,4 +1,4 @@
-export const getBonusRate = (policyYear) => {
+const getBonusRate = (policyYear) => {
   const bonusRates = {
     1: 0.025, // 2.5%
     2: 0.03, // 3%
@@ -17,15 +17,20 @@ export const getBonusRate = (policyYear) => {
   return bonusRates[policyYear] || 0.025;
 };
 
-export const calculateBonus = (sumAssured, policyYear) => {
+const calculateBonus = (sumAssured, policyYear) => {
   const bonusRate = getBonusRate(policyYear);
   return sumAssured * bonusRate;
 };
 
-export const calculateCumulativeBonus = (sumAssured, uptoYear) => {
+const calculateCumulativeBonus = (sumAssured, uptoYear) => {
   let totalBonus = 0;
   for (let year = 1; year <= uptoYear; year++) {
     totalBonus += calculateBonus(sumAssured, year);
   }
   return totalBonus;
+};
+module.exports = {
+  calculateBonus,
+  calculateCumulativeBonus,
+  getBonusRate,
 };

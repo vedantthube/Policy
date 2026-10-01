@@ -1,4 +1,4 @@
-export const calculateModalPremium = (sumAssured, age, gender, policyType) => {
+const calculateModalPremium = (sumAssured, age, gender, policyType) => {
   // Get base premium rate from policy master
   // This would typically come from a rating table
   const premiumRates = {
@@ -15,7 +15,7 @@ export const calculateModalPremium = (sumAssured, age, gender, policyType) => {
   return sumAssured * effectiveRate;
 };
 
-export const calculateAnnualPremium = (modalPremium, frequency) => {
+const calculateAnnualPremium = (modalPremium, frequency) => {
   const frequencyFactors = {
     YEARLY: 1.0,
     HALF_YEARLY: 0.51, // 2 x 51%
@@ -24,4 +24,8 @@ export const calculateAnnualPremium = (modalPremium, frequency) => {
   };
 
   return modalPremium / frequencyFactors[frequency];
+};
+module.exports = {
+  calculateAnnualPremium,
+  calculateModalPremium,
 };

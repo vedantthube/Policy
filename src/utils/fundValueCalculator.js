@@ -1,4 +1,11 @@
-export const calculateFundValue = (
+const {
+  getPACCharge,
+  getAdminCharge,
+  calculateGST,
+  // getMortalityCharge,
+  getFMCCharge,
+} = require("./charge");
+const calculateFundValue = (
   previousFundValue,
   annualPremium,
   policyYear,
@@ -23,15 +30,8 @@ export const calculateFundValue = (
   // Calculate Sum at Risk
   const sumAtRisk = Math.max(0, sumAssured - fundBeforeMortality);
 
-  // Mortality Charge
-  const mortalityCharge = getMortalityCharge(
-    age + policyYear - 1,
-    gender,
-    sumAtRisk,
-  );
-
   // Fund after mortality
-  let fundValue = fundBeforeMortality - mortalityCharge;
+  let fundValue = fundBeforeMortality;
 
   // FMC charge
   const fmc = getFMCCharge(fundValue);
@@ -39,3 +39,4 @@ export const calculateFundValue = (
 
   return Math.max(0, fundValue);
 };
+module.exports = { calculateFundValue };

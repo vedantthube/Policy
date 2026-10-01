@@ -1,78 +1,47 @@
-const express = require("express");
-const router = express.Router();
-const { Illustration, Policy, AuditLog } = require("../models");
-const { authenticate } = require("../middleware/auth");
-const { generateIllustration } = require("../utils/illustrationGenerator");
+const { generateIllustration } = require("../utils/illustrationGenerator"); // Adjust path if needed
 
-// Generate illustration for a policy
-router.post("/generate/:policyId", authenticate, async (req, res) => {
+const Illustrationcontroller = async (req, res) => {
   try {
-    const policy = await Policy.findOne({
-      where: {
-        id: req.params.policyId,
-        user_id: req.user.userId,
-      },
-    });
+    const { dob, gender, modalPremium, ppt, premiumFrequency, pt, sumAssured } =
+      req.body;
 
-    if (!policy) {
-      return res.status(404).json({ error: "Policy not found" });
+    // Optional validation check
+    if (!dob || !modalPremium || !ppt || !pt || !sumAssured) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required policy parameters.",
+      });
     }
 
-    // Generate illustration
-    const result = generateIllustration(policy.toJSON());
+    // Map req.body to the expected structure of generateIllustration
+    const policyData = {
+      dob,
+      gender,
+      sumAssured: Number(sumAssured),
+      modalPremium: Number(modalPremium),
+      premiumFrequency: (premiumFrequency || "ANNUAL").toUpperCase(),
+      policyTerm: Number(pt),
+      premiumPaymentTerm: Number(ppt),
+      policyType: "Type_4d",
+    };
+    console.log("OPPPP", policyData);
+    // Calculate illustration table, summary, and IRR
+    const result = generateIllustration(policyData);
 
-    // Save illustration details
-    const illustrations = result.illustration.map((ill) => ({
-      policy_id: policy.id,
-      ...ill,
-    }));
-
-    await Illustration.bulkCreate(illustrations, { ignoreDuplicates: true });
-
-    // Log action
-    await AuditLog.create({
-      user_id: req.user.userId,
-      action: "ILLUSTRATION_GENERATED",
-      table_name: "policies",
-      record_id: policy.id,
-      ip_address: req.ip,
-    });
-
-    res.json({
-      policyId: policy.id,
-      illustration: result.illustration,
-      irr: result.irr,
-      summary: result.summary,
+    return res.status(200).json({
+      success: true,
+      data: result,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get illustration for a policy
-router.get("/:policyId", authenticate, async (req, res) => {
-  try {
-    // Verify policy belongs to user
-    const policy = await Policy.findOne({
-      where: {
-        id: req.params.policyId,
-        user_id: req.user.userId,
-      },
+    console.error("Illustration calculation error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to generate policy illustration.",
+      error: error.message,
     });
-
-    if (!policy) {
-      return res.status(404).json({ error: "Policy not found" });
-    }
-
-    const illustrations = await Illustration.findAll({
-      where: { policy_id: req.params.policyId },
-      order: [["illustration_year", "ASC"]],
-    });
-
-    res.json(illustrations);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  Illustrationcontroller,
+};

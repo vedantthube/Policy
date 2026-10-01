@@ -1,10 +1,10 @@
-export const getMortalityCharge = (age, gender, sumAtRisk, policyType) => {
-  // Get mortality rate from mortality tables based on age and gender
-  const mortalityRate = getMortalityRateFromTable(age, gender, policyType);
-  return (sumAtRisk / 1000) * mortalityRate;
-};
+// const getMortalityCharge = (age, gender, sumAtRisk, policyType) => {
+//   // Get mortality rate from mortality tables based on age and gender
+//   const mortalityRate = getMortalityRateFromTable(age, gender, policyType);
+//   return (sumAtRisk / 1000) * mortalityRate;
+// };
 
-export const getPACCharge = (policyYear, sumAssured) => {
+const getPACCharge = (policyYear, sumAssured) => {
   // PAC = Policy Administration Charge
   // Typically a percentage or fixed amount
   const pacRates = {
@@ -23,7 +23,7 @@ export const getPACCharge = (policyYear, sumAssured) => {
   return pacRates[policyYear] || 500;
 };
 
-export const getAdminCharge = (policyYear, premiumAmount) => {
+const getAdminCharge = (policyYear, premiumAmount) => {
   // Admin charge is typically percentage based
   if (policyYear <= 10) {
     return Math.min(500, premiumAmount * 0.15);
@@ -31,12 +31,19 @@ export const getAdminCharge = (policyYear, premiumAmount) => {
   return 0;
 };
 
-export const getFMCCharge = (fundValue) => {
+const getFMCCharge = (fundValue) => {
   // FMC = Fund Management Charge (1.35% or 0.75% depending on fund)
   return fundValue * 0.0135;
 };
 
-export const calculateGST = (chargeableAmount) => {
+const calculateGST = (chargeableAmount) => {
   const GST_RATE = 0.18;
   return chargeableAmount * GST_RATE;
+};
+module.exports = {
+  calculateGST,
+  getAdminCharge,
+  getFMCCharge,
+  // getMortalityCharge,
+  getPACCharge,
 };
